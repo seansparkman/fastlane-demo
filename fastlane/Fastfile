@@ -39,16 +39,7 @@ private_lane :setup_project do
   match(
     type: "appstore", 
     readonly: false, 
-    force: false,
-    app_identifier: $applicationIdentifier, 
-    team_id: $teamId,
-    username: $username,
-    git_url: "git@github.com:seansparkman/apple-certificates.git")
-    
-  match(
-    type: "adhoc", 
-    readonly: false, 
-    force: false,
+    force: true,
     app_identifier: $applicationIdentifier, 
     team_id: $teamId,
     username: $username,
@@ -57,11 +48,18 @@ private_lane :setup_project do
   match(
     type: "development", 
     readonly: false, 
-    force: false,
+    force: true,
     app_identifier: $applicationIdentifier, 
     team_id: $teamId,
     username: $username,
     git_url: "git@github.com:seansparkman/apple-certificates.git")
+
+  # requires the plugin to be installed 
+  # fastlane add_plugin appicon
+  appicon(
+    appicon_image_file: "./logo.png",
+    appicon_devices: [:ipad, :iphone, :ios_marketing],
+    appicon_path: "./iOS/Resources/Images.xcassets")
 end
 
 lane :build do
@@ -69,9 +67,21 @@ lane :build do
 end
 
 private_lane :sign do
+
+  
+  sigh(
+    adhoc: true,
+    force: false,
+    filename: "#{$applicationIdentifier}.mobileprovision",
+    app_identifier: $applicationIdentifier, 
+    team_id: $teamId, 
+    username: $username
+  )
+
   resign(
-    ipa: ipa,
+    ipa: $ipa,
     signing_identity: "iPhone Distribution: Sean Sparkman (GV34E6HMXZ)",
+    provisioning_profile: "#{$applicationIdentifier}.mobileprovision"
   )
 end
 
@@ -80,7 +90,7 @@ end
 # info which you can add here later
 lane :beta do
   setup_project
-  #build
+  build
   sign
   # build your iOS app
   #gym(
@@ -89,6 +99,18 @@ lane :beta do
   #)
 
   # upload to Testflight
+
+  deliver(
+    force: true,
+    ipa: $ipa,
+    skip_screenshots: false,
+    skip_metadata: false,
+    automatic_release: false,
+    submit_for_review: false,
+    username: $username,
+    app_identifier: $applicationIdentifier,
+    team_id: $itcId,
+  )
   
   pilot(
     ipa: $ipa,

@@ -36,13 +36,14 @@
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <CodesignKey>iPhone Developer</CodesignKey>
+    <CodesignKey>iPhone Distribution: Sean Sparkman (GV34E6HMXZ)</CodesignKey>
     <MtouchFloat32>true</MtouchFloat32>
     <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>SdkOnly</MtouchLink>
     <MtouchArch>ARM64</MtouchArch>
     <MtouchHttpClientHandler>HttpClientHandler</MtouchHttpClientHandler>
     <PlatformTarget>x86</PlatformTarget>
+    <CodesignProvision>match AppStore com.seansparkman.HelloWorld</CodesignProvision>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>pdbonly</DebugType>
@@ -124,6 +125,23 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+  </ItemGroup>  
+  <ItemGroup>
+    <ImageAsset Include="Resources\Images.xcassets\.DS_Store" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\Contents.json" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-1024x1024.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-120x120.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-152x152.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-167x167.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-180x180.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-20x20.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-29x29.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-40x40.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-58x58.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-60x60.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-76x76.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-80x80.png" />
+    <ImageAsset Include="Resources\Images.xcassets\AppIcon.appiconset\logo-87x87.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\packages\Xamarin.Forms.2.4.0.280\build\netstandard1.0\Xamarin.Forms.targets" Condition="Exists('..\packages\Xamarin.Forms.2.4.0.280\build\netstandard1.0\Xamarin.Forms.targets')" />
