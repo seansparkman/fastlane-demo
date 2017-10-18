@@ -1,0 +1,113 @@
+require 'commander'
+# More documentation about how to customize your build
+# can be found here:
+# https://docs.fastlane.tools
+fastlane_version "1.109.0"
+
+# This value helps us track success metrics for Fastfiles
+# we automatically generate. Feel free to remove this line
+# once you get things running smoothly!
+generated_fastfile_id "772f5e05-8c71-476c-8ff7-2d9ddbfcd1d6"
+
+default_platform :ios
+
+$username = "sean.sparkman@outlook.com"
+$applicationIdentifier = "com.seansparkman.HelloWorld"
+$teamId = "GV34E6HMXZ"
+$itcId = "118537659"
+$appName = "Hello DFW Mobile"
+$lang = "English"
+$ipa = "./artifacts/apple/release/HelloWorld.iOS.ipa"
+
+private_lane :setup_project do
+
+  produce(
+    username: $username,
+    app_identifier: $applicationIdentifier,
+    team_id: $teamId,
+    app_name: $appName,
+    language: $lang,
+    sku: "#{$applicationIdentifier}-1",
+    itc_team_id: $itcId,
+    #enabled_features: {
+    #  push_notification: "on"
+    #})
+  )
+
+  # Get provisioning profiles
+
+  match(
+    type: "appstore", 
+    readonly: false, 
+    force: false,
+    app_identifier: $applicationIdentifier, 
+    team_id: $teamId,
+    username: $username,
+    git_url: "git@github.com:seansparkman/apple-certificates.git")
+    
+  match(
+    type: "adhoc", 
+    readonly: false, 
+    force: false,
+    app_identifier: $applicationIdentifier, 
+    team_id: $teamId,
+    username: $username,
+    git_url: "git@github.com:seansparkman/apple-certificates.git")
+    
+  match(
+    type: "development", 
+    readonly: false, 
+    force: false,
+    app_identifier: $applicationIdentifier, 
+    team_id: $teamId,
+    username: $username,
+    git_url: "git@github.com:seansparkman/apple-certificates.git")
+end
+
+lane :build do
+  sh("cd ..;./build.sh")
+end
+
+private_lane :sign do
+  resign(
+    ipa: ipa,
+    signing_identity: "iPhone Distribution: Sean Sparkman (GV34E6HMXZ)",
+  )
+end
+
+# Fastfile actions accept additional configuration, but
+# don't worry, fastlane will prompt you for required
+# info which you can add here later
+lane :beta do
+  setup_project
+  #build
+  sign
+  # build your iOS app
+  #gym(
+  #  # scheme: "YourScheme",
+  #  export_method: "app-store"
+  #)
+
+  # upload to Testflight
+  
+  pilot(
+    ipa: $ipa,
+    app_identifier: $applicationIdentifier,
+    username: $username,
+    team_id: $itcId,
+    distribute_external: true,
+    skip_waiting_for_build_processing: true,
+    beta_app_description: "This is a hello world application",
+    beta_app_feedback_email: "sean.sparkman@outlook.com"
+  )
+
+  validate
+end
+
+lane :validate do
+  precheck(
+    app_identifier: $applicationIdentifier,
+    username: $itunesConnectUserName,
+    team_id: $itcId,
+  )
+end
