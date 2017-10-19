@@ -34,9 +34,9 @@ xcode-select --install
 fastlane build
 ```
 
-### beta
+### production
 ```
-fastlane beta
+fastlane production
 ```
 
 ### validate

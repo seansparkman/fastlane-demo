@@ -66,9 +66,7 @@ lane :build do
   sh("cd ..;./build.sh")
 end
 
-private_lane :sign do
-
-  
+private_lane :sign do  
   sigh(
     adhoc: true,
     force: false,
@@ -88,7 +86,7 @@ end
 # Fastfile actions accept additional configuration, but
 # don't worry, fastlane will prompt you for required
 # info which you can add here later
-lane :beta do
+lane :production do
   setup_project
   build
   sign
@@ -104,7 +102,7 @@ lane :beta do
     force: true,
     ipa: $ipa,
     skip_screenshots: false,
-    skip_metadata: false,
+    skip_metadata: true,
     automatic_release: false,
     submit_for_review: false,
     username: $username,
